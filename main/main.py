@@ -26,6 +26,9 @@ while running:
         if event.type == pygame.MOUSEMOTION:
             if player_rect.collidepoint(event.pos):
                 print("Mouse collision with player rect")
+        if event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_SPACE:
+                print("jump")
 
     snail_rect.x -= 4
     if snail_rect.right < 0:
@@ -39,6 +42,10 @@ while running:
 
     screen.blit(snail_surface, snail_rect)
     screen.blit(player_surface, player_rect)
+
+    # keys = pygame.key.get_pressed()
+    # if keys[pygame.K_SPACE]:
+    #     print("jump")
 
     pygame.display.update()
     clock.tick(60)
