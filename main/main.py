@@ -1,18 +1,24 @@
 import pygame
 
+
+def display_score():
+    current_time = pygame.time.get_ticks() - start_time
+    score_surface = font.render(f"Score: {round(current_time / 1000)}", False, (64, 64, 64))
+    score_rect = score_surface.get_rect(center = (400, 50))
+    screen.blit(score_surface, score_rect)
+
+
 pygame.init()
 screen = pygame.display.set_mode((800, 400))
 pygame.display.set_caption("Runner")
 clock = pygame.time.Clock()
 game_over = False
 running = True
+start_time = 0
 
 sky_surface = pygame.image.load("../graphics/sky.png").convert_alpha()
 ground_surface = pygame.image.load("../graphics/ground.png").convert_alpha()
-
 font = pygame.font.Font("../font/pixeltype.ttf", 50)
-score_surface = font.render("My game", False, (64, 64, 64))
-score_rect = score_surface.get_rect(center = (400, 50))
 
 snail_surface = pygame.image.load("../graphics/snail/snail1.png").convert_alpha()
 snail_rect = snail_surface.get_rect(midbottom = (800, 300))
@@ -36,6 +42,7 @@ while running:
             if event.key == pygame.K_SPACE and game_over:
                 game_over = False
                 snail_rect.left = 800
+                start_time = pygame.time.get_ticks()
 
     if not game_over:
 
@@ -46,8 +53,7 @@ while running:
         screen.blit(sky_surface, (0, 0))
         screen.blit(ground_surface, (0, 300))
 
-        pygame.draw.rect(screen, "#c0e8ec", score_rect)
-        screen.blit(score_surface, score_rect)
+        display_score()
 
         screen.blit(snail_surface, snail_rect)
 
