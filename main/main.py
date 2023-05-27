@@ -34,6 +34,18 @@ def player_collision(player, enemy):
     return False
 
 
+def player_animation():
+    global player_surface, player_index
+
+    if player_rect.bottom < 300:
+        player_surface = player_jump
+    else:
+        player_index += 0.1
+        if player_index >= len(player_walk):
+            player_index = 0
+        player_surface = player_walk[int(player_index)]
+
+
 # Inicialização do Pygame e variáveis
 pygame.init()
 screen = pygame.display.set_mode((800, 400), 0, 0, 0)
@@ -41,8 +53,6 @@ pygame.display.set_caption("Connor's Race")
 clock = pygame.time.Clock()
 game_over = True
 running = True
-paused = False
-paused_time = 0
 start_time = 0
 score = 0
 
@@ -52,14 +62,32 @@ ground_surface = pygame.image.load("../graphics/ground.png").convert_alpha()
 font = pygame.font.Font("../font/pixeltype.ttf", 50)
 
 # Criação dos inimigos
-snail_surface = pygame.image.load("../graphics/snail/snail1.png").convert_alpha()
-fly_surface = pygame.image.load("../graphics/fly/fly1.png").convert_alpha()
+snail_index = 0
+snail_move = [
+    pygame.image.load("../graphics/snail/snail1.png").convert_alpha(),
+    pygame.image.load("../graphics/snail/snail2.png").convert_alpha(),
+]
+snail_surface = snail_move[snail_index]
+
+fly_index = 0
+fly_move = [
+    pygame.image.load("../graphics/fly/fly1.png").convert_alpha(),
+    pygame.image.load("../graphics/fly/fly2.png").convert_alpha()
+]
+fly_surface = fly_move[fly_index]
+
 enemy_rect_list = []
 
 # Criação do player
-player_surface = pygame.image.load("../graphics/player/player_walk_1.png").convert_alpha()
-player_rect = player_surface.get_rect(midbottom = (80, 300))
+player_index = 0
 player_gravity = 0
+player_walk = [
+    pygame.image.load("../graphics/player/player_walk_1.png").convert_alpha(),
+    pygame.image.load("../graphics/player/player_walk_2.png").convert_alpha()
+]
+player_jump = pygame.image.load("../graphics/player/player_jump.png")
+player_surface = player_walk[player_index]
+player_rect = player_surface.get_rect(midbottom = (80, 300))
 
 # Criação do player no game over
 player_stand = pygame.image.load("../graphics/player/player_stand.png").convert_alpha()
@@ -78,22 +106,45 @@ hint_text_rect = hint_text.get_rect(center = (400, 350))
 enemy_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(enemy_timer, 1500)
 
+snail_animation = pygame.USEREVENT + 2
+pygame.time.set_timer(snail_animation, 500)
+
+fly_animation = pygame.USEREVENT + 3
+pygame.time.set_timer(fly_animation, 200)
+
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+
         if not game_over:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if player_rect.collidepoint(event.pos) and player_rect.bottom == 300:
                     player_gravity = -20
+
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and player_rect.bottom == 300:
                     player_gravity = -20
+
             if event.type == enemy_timer:
                 if randint(0, 2):
                     enemy_rect_list.append(snail_surface.get_rect(bottomright = (randint(900, 1100), 300)))
                 else:
                     enemy_rect_list.append(fly_surface.get_rect(bottomright = (randint(900, 1100), 210)))
+
+            if event.type == snail_animation:
+                if snail_index == 0:
+                    snail_index = 1
+                else:
+                    snail_index = 0
+                snail_surface = snail_move[snail_index]
+
+            if event.type == fly_animation:
+                if fly_index == 0:
+                    fly_index = 1
+                else:
+                    fly_index = 0
+                fly_surface = fly_move[fly_index]
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and game_over:
@@ -116,6 +167,7 @@ while running:
         if player_rect.bottom > 300:
             player_rect.bottom = 300
 
+        player_animation()
         screen.blit(player_surface, player_rect)
 
         # Colisões
