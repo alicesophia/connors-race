@@ -1,8 +1,9 @@
 import pygame
-from random import randint
+from player import Player
+from enemy import Enemy
+from random import choice
 
 
-# Função para exibir o score
 def display_score():
     current_time = int(pygame.time.get_ticks() / 1000) - start_time
     score_surface = font.render(f"Score: {current_time}", False, (64, 64, 64))
@@ -11,39 +12,8 @@ def display_score():
     return current_time
 
 
-def move_enemy(enemy_list):
-    if enemy_list:
-        for enemy_rect in enemy_list:
-            enemy_rect.x -= 5
-            if enemy_rect.bottom == 300:
-                screen.blit(snail_surface, enemy_rect)
-            else:
-                screen.blit(fly_surface, enemy_rect)
-
-        enemy_list = [enemy for enemy in enemy_list if enemy.x > -50]
-        return enemy_list
-    else:
-        return []
-
-
-def player_collision(player, enemy):
-    if enemy:
-        for enemy_rect in enemy:
-            if player.colliderect(enemy_rect):
-                return True
-    return False
-
-
-def player_animation():
-    global player_surface, player_index
-
-    if player_rect.bottom < 300:
-        player_surface = player_jump
-    else:
-        player_index += 0.1
-        if player_index >= len(player_walk):
-            player_index = 0
-        player_surface = player_walk[int(player_index)]
+def player_collision():
+    return pygame.sprite.spritecollide(player_group.sprite, enemy_group, False)
 
 
 # Inicialização do Pygame e variáveis
@@ -57,60 +27,30 @@ start_time = 0
 score = 0
 
 # Criação do cenário
-sky_surface = pygame.image.load("../graphics/sky.png").convert_alpha()
-ground_surface = pygame.image.load("../graphics/ground.png").convert_alpha()
-font = pygame.font.Font("../font/pixeltype.ttf", 50)
+sky_surface = pygame.image.load("../assets/graphics/sky.png").convert_alpha()
+ground_surface = pygame.image.load("../assets/graphics/ground.png").convert_alpha()
+font = pygame.font.Font("../assets/font/pixeltype.ttf", 50)
 
-# Criação dos inimigos
-snail_index = 0
-snail_move = [
-    pygame.image.load("../graphics/snail/snail1.png").convert_alpha(),
-    pygame.image.load("../graphics/snail/snail2.png").convert_alpha(),
-]
-snail_surface = snail_move[snail_index]
+# Criação dos sprites
+player_group = pygame.sprite.GroupSingle()
+player_group.add(Player())
 
-fly_index = 0
-fly_move = [
-    pygame.image.load("../graphics/fly/fly1.png").convert_alpha(),
-    pygame.image.load("../graphics/fly/fly2.png").convert_alpha()
-]
-fly_surface = fly_move[fly_index]
+enemy_group = pygame.sprite.Group()
 
-enemy_rect_list = []
-
-# Criação do player
-player_index = 0
-player_gravity = 0
-player_walk = [
-    pygame.image.load("../graphics/player/player_walk_1.png").convert_alpha(),
-    pygame.image.load("../graphics/player/player_walk_2.png").convert_alpha()
-]
-player_jump = pygame.image.load("../graphics/player/player_jump.png")
-player_surface = player_walk[player_index]
-player_rect = player_surface.get_rect(midbottom = (80, 300))
-
-# Criação do player no game over
-player_stand = pygame.image.load("../graphics/player/player_stand.png").convert_alpha()
+# Tela do game over
+player_stand = pygame.image.load("../assets/graphics/player/player_stand.png").convert_alpha()
 player_stand = pygame.transform.rotozoom(player_stand, 0, 2)
 player_stand_rect = player_stand.get_rect(center = (400, 200))
 
-# Texto do nome do game
 title_text = font.render("Connor's Race", False, (64, 64, 64))
 title_text_rect = title_text.get_rect(center = (400, 50))
 
-# Mensagem ao jogador
-hint_text = font.render("Aperte espaço para começar", False, (64, 64, 64))
+hint_text = font.render("Aperte espaço para começar".encode(), False, (64, 64, 64))
 hint_text_rect = hint_text.get_rect(center = (400, 350))
 
-# Timer dos inimigos
+# Timer do spawn dos inimigos
 enemy_timer = pygame.USEREVENT + 1
 pygame.time.set_timer(enemy_timer, 1500)
-
-snail_animation = pygame.USEREVENT + 2
-pygame.time.set_timer(snail_animation, 500)
-
-fly_animation = pygame.USEREVENT + 3
-pygame.time.set_timer(fly_animation, 200)
 
 while running:
     for event in pygame.event.get():
@@ -118,33 +58,8 @@ while running:
             running = False
 
         if not game_over:
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if player_rect.collidepoint(event.pos) and player_rect.bottom == 300:
-                    player_gravity = -20
-
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_SPACE and player_rect.bottom == 300:
-                    player_gravity = -20
-
             if event.type == enemy_timer:
-                if randint(0, 2):
-                    enemy_rect_list.append(snail_surface.get_rect(bottomright = (randint(900, 1100), 300)))
-                else:
-                    enemy_rect_list.append(fly_surface.get_rect(bottomright = (randint(900, 1100), 210)))
-
-            if event.type == snail_animation:
-                if snail_index == 0:
-                    snail_index = 1
-                else:
-                    snail_index = 0
-                snail_surface = snail_move[snail_index]
-
-            if event.type == fly_animation:
-                if fly_index == 0:
-                    fly_index = 1
-                else:
-                    fly_index = 0
-                fly_surface = fly_move[fly_index]
+                enemy_group.add(Enemy(choice(["snail", "snail", "snail", "fly"])))
 
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE and game_over:
@@ -157,29 +72,22 @@ while running:
         screen.blit(ground_surface, (0, 300))
         score = display_score()
 
-        # Inimigos
-        enemy_rect_list = move_enemy(enemy_rect_list)
-
         # Player
-        player_gravity += 1
-        player_rect.y += player_gravity
+        player_group.draw(screen)
+        player_group.update()
 
-        if player_rect.bottom > 300:
-            player_rect.bottom = 300
-
-        player_animation()
-        screen.blit(player_surface, player_rect)
+        # Inimigos
+        enemy_group.draw(screen)
+        enemy_group.update()
 
         # Colisões
-        game_over = player_collision(player_rect, enemy_rect_list)
+        game_over = player_collision()
     else:
         # Tela do game over
+        enemy_group.empty()
         screen.fill((94, 129, 162))
         screen.blit(player_stand, player_stand_rect)
         screen.blit(title_text, title_text_rect)
-        enemy_rect_list.clear()
-        player_rect.midbottom = (80, 300)
-        player_gravity = 0
 
         # Mensagem do game over
         if score == 0:
