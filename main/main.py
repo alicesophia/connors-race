@@ -25,6 +25,9 @@ game_over = True
 running = True
 start_time = 0
 score = 0
+music = pygame.mixer.Sound("../assets/audio/music.wav")
+music.set_volume(0.1)
+music.play(-1)
 
 # Criação do cenário
 sky_surface = pygame.image.load("../assets/graphics/sky.png").convert_alpha()
