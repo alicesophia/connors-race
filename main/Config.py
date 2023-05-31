@@ -10,8 +10,13 @@ class Config:
         self.state = 'menu'
         self.game_over = True
 
-        self.screen = pygame.display.set_mode((1300, 400), 0, 0, 0)
+        self.screen = pygame.display.set_mode((1280, 720), 0, 0, 0, 0)
         pygame.display.set_caption("Connor's Race")
+        self.menu_background = pygame.image.load("../assets/graphics/main_menu/background.png").convert_alpha()
+        self.logo = pygame.image.load("../assets/graphics/main_menu/logo.jpeg").convert_alpha()
+        self.play_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_play_pressed.png").convert_alpha()
+        self.options_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_options_pressed.png").convert_alpha()
+        self.quit_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_quit_pressed.png").convert_alpha()
 
         self.clock = pygame.time.Clock()
 
