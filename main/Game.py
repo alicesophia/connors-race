@@ -9,7 +9,6 @@ class Game:
     def __init__(self, config):
         super().__init__()
         self.config = config
-        self.score = 0
         self.start_time = 0
         pygame.time.set_timer(self.config.enemy_timer, 1500)
 
@@ -19,8 +18,8 @@ class Game:
         self.enemy_group = pygame.sprite.Group()
 
         # Criação do cenário
-        self.sky_surface = pygame.image.load("../assets/graphics/sky.png").convert_alpha()
-        self.ground_surface = pygame.image.load("../assets/graphics/ground.png").convert_alpha()
+        self.background = pygame.transform.scale(self.config.game_scenario, (self.config.width, self.config.height * 0.7))
+        self.ground = pygame.transform.scale(self.config.game_ground, (self.config.width, self.config.height * 0.3))
 
         # Tela do game over
         self.player_stand = pygame.image.load("../assets/graphics/player/player_stand.png").convert_alpha()
@@ -33,14 +32,12 @@ class Game:
         self.hint_text = config.font.render("Aperte espaço para começar".encode(), False, (64, 64, 64))
         self.hint_text_rect = self.hint_text.get_rect(center = (400, 350))
 
-
-
     def update(self):
         for event in self.config.events:
             if not self.config.game_over and self.config.state != 'pause':
                 if event.type == self.config.enemy_timer:
                     print("TIMER")
-                    self.enemy_group.add(Enemy(choice(["snail", "snail", "snail", "fly"])))
+                    self.enemy_group.add(Enemy(choice(["snail", "snail", "snail", "fly"]), self.config))
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and self.config.game_over:
@@ -48,14 +45,10 @@ class Game:
                     self.start_time = int(pygame.time.get_ticks() / 1000)
 
         if not self.config.game_over:
-            # print("JOGO RODANDO")
             # Cenário
-            self.config.screen.blit(self.sky_surface, (0, 0))
-            self.config.screen.blit(self.sky_surface, (700, 0))
-
-            self.config.screen.blit(self.ground_surface, (0, 300))
-            self.config.screen.blit(self.ground_surface, (700, 300))
-            self.score = self.display_score()
+            self.config.screen.blit(self.background, (0, 0))
+            self.config.screen.blit(self.ground, (0, self.config.height * 0.7))
+            self.config.score = self.display_score()
 
             # Player
             self.player_group.draw(self.config.screen)
@@ -75,10 +68,10 @@ class Game:
             self.config.screen.blit(self.title_text, self.title_text_rect)
 
             # Mensagem do game over
-            if self.score == 0:
+            if self.config.score == 0:
                 self.config.screen.blit(self.hint_text, self.hint_text_rect)
             else:
-                score_message = self.config.font.render(f'Game over! Seu score foi: {self.score}', False, (64, 64, 64))
+                score_message = self.config.font.render(f'Game over! Seu score foi: {self.config.score}', False, (64, 64, 64))
                 score_message_rect = score_message.get_rect(center = (400, 350))
                 self.config.screen.blit(score_message, score_message_rect)
 

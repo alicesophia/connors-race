@@ -13,23 +13,23 @@ class Player(pygame.sprite.Sprite):
         ]
         self.jump = pygame.image.load("../assets/graphics/player/player_jump.png")
         self.image = self.walk[self.index]
-        self.rect = self.image.get_rect(midbottom = (80, 300))
+        self.rect = self.image.get_rect(midbottom = (self.config.width * 0.1, self.config.height * 0.7))
         self.gravity = 0
 
     def player_input(self):
         keys = pygame.key.get_pressed()
-        if keys[pygame.K_SPACE] and self.rect.bottom >= 300:
+        if keys[pygame.K_SPACE] and self.rect.bottom >= self.config.height * 0.7:
             self.config.jump_sound.play()
-            self.gravity = -20
+            self.gravity = -(self.config.height * 0.030)
 
     def player_gravity(self):
-        self.gravity += 1
+        self.gravity += self.config.height * 0.0015
         self.rect.y += self.gravity
-        if self.rect.bottom >= 300:
-            self.rect.bottom = 300
+        if self.rect.bottom >= self.config.height * 0.7:
+            self.rect.bottom = self.config.height * 0.7
 
     def player_animation(self):
-        if self.rect.bottom < 300:
+        if self.rect.bottom < self.config.height * 0.7:
             self.image = self.jump
         else:
             self.index += 0.1

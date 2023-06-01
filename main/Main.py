@@ -3,10 +3,7 @@ from main import Config, Game
 
 
 def menu():
-    background = pygame.transform.scale(
-        config.menu_background,
-        (config.screen.get_width(), config.screen.get_height())
-    )
+    background = pygame.transform.scale(config.menu_background, (config.width, config.height))
     config.screen.blit(background, (0, 0))
     config.screen.blit(logo_img, logo_rect)
     config.screen.blit(play_button_pressed, play_button_pressed_rect)
@@ -33,38 +30,17 @@ config = Config.Config()
 cursor_arrow = pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_ARROW)
 cursor_hand = pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_HAND)
 
-logo_img = pygame.transform.scale(
-    config.logo,
-    (config.screen.get_width() / 100 * 25, config.screen.get_height() / 100 * 30)
-)
+logo_img = pygame.transform.scale(config.logo, (config.width * 0.45, config.height * 0.8))
+logo_rect = logo_img.get_rect(center = (config.width * 0.5, config.height * 0.25))
 
-logo_rect = logo_img.get_rect(
-    center = (config.screen.get_width() / 100 * 50, config.screen.get_height() / 100 * 25)
-)
+play_button_pressed = pygame.transform.scale(config.play_button_pressed, (config.width * 0.2, config.height * 0.15))
+play_button_pressed_rect = play_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.55))
 
-play_button_pressed = pygame.transform.scale(
-    config.play_button_pressed,
-    (config.screen.get_width() / 100 * 20, config.screen.get_height() / 100 * 15)
-)
-play_button_pressed_rect = play_button_pressed.get_rect(
-    center = (config.screen.get_width() / 100 * 50, config.screen.get_height() / 100 * 50)
-)
+options_button_pressed = pygame.transform.scale(config.options_button_pressed, (config.width * 0.165, config.height * 0.125))
+options_button_pressed_rect = options_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.7))
 
-options_button_pressed = pygame.transform.scale(
-    config.options_button_pressed,
-    (config.screen.get_width() / 100 * 16.5, config.screen.get_height() / 100 * 12.5)
-)
-options_button_pressed_rect = options_button_pressed.get_rect(
-    center = (config.screen.get_width() / 100 * 50, config.screen.get_height() / 100 * 65)
-)
-
-quit_button_pressed = pygame.transform.scale(
-    config.quit_button_pressed,
-    (config.screen.get_width() / 100 * 17.5, config.screen.get_height() / 100 * 13)
-)
-quit_button_pressed_rect = quit_button_pressed.get_rect(
-    center = (config.screen.get_width() / 100 * 50, config.screen.get_height() / 100 * 80)
-)
+quit_button_pressed = pygame.transform.scale(config.quit_button_pressed, (config.width * 0.175, config.height * 0.13))
+quit_button_pressed_rect = quit_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.85))
 
 while running:
     config.events = pygame.event.get()
@@ -82,6 +58,7 @@ while running:
 
         if event.type == pygame.MOUSEBUTTONUP:
             if play_button_pressed_rect.collidepoint(event.pos) and event.button == 1:
+                config.clock.tick(5)
                 config.state = 'selection'
             if quit_button_pressed_rect.collidepoint(event.pos) and event.button == 1:
                 running = False
@@ -93,7 +70,7 @@ while running:
                     pygame.time.set_timer(config.enemy_timer, 0)
                 else:
                     config.state = 'play'
-                    pygame.time.set_timer(config.enemy_timer, 1500)
+                    pygame.time.set_timer(config.enemy_timer, 2000)
 
             if event.key == pygame.K_RETURN:
                 game = Game.Game(config)
