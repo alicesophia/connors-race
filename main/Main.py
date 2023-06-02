@@ -1,5 +1,6 @@
 import pygame
-from main import Config, Game
+import Config
+import Game
 
 
 def menu():

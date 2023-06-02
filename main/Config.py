@@ -25,7 +25,7 @@ class Config:
         self.yellow_dialog = pygame.image.load("../assets/graphics/main_menu/yellow_dialog.png").convert_alpha()
         self.space_button = pygame.image.load("../assets/graphics/main_menu/button_space.png").convert_alpha()
         self.esc_button = pygame.image.load("../assets/graphics/main_menu/button_esc.png").convert_alpha()
-        self.game_scenario = pygame.image.load("../assets/graphics/scenario/game_background_1.png").convert_alpha()
+        self.game_scenario = pygame.image.load("../assets/graphics/scenario/game_background.png").convert_alpha()
         self.game_ground = pygame.image.load("../assets/graphics/ground.png").convert_alpha()
 
         self.clock = pygame.time.Clock()
