@@ -9,19 +9,31 @@ def menu():
     config.screen.blit(play_button_pressed, play_button_pressed_rect)
     config.screen.blit(options_button_pressed, options_button_pressed_rect)
     config.screen.blit(quit_button_pressed, quit_button_pressed_rect)
-    print("MENU")
 
 
 def selection():
-    config.screen.fill((94, 129, 162))
-    score_message = config.font.render(f'PRESSIONE ENTER', False, (64, 64, 64))
-    score_message_rect = score_message.get_rect(center = (400, 350))
-    config.screen.blit(score_message, score_message_rect)
-    print("SELECTION")
+    background = pygame.transform.scale(config.menu_background, (config.width, config.height))
+    config.screen.blit(background, (0, 0))
+    dialog_text = config.font.render("Com quem você vai jogar?", True, (171, 52, 31))
+    dialog_text_rect = dialog_text.get_rect(center = (config.width * 0.5, config.height * 0.25))
+    choose_sarah = config.font.render("Sarah Connor", True, (171, 52, 31))
+    sarah_rect = choose_sarah.get_rect(center = (config.width * 0.35, config.height * 0.80))
+    choose_john = config.font.render("John Connor", True, (171, 52, 31))
+    john_rect = choose_john.get_rect(center = (config.width * 0.65, config.height * 0.80))
+    config.screen.blit(dialog, dialog_rect)
+    config.screen.blit(dialog_text, dialog_text_rect)
+    config.screen.blit(choose_sarah_button, choose_sarah_rect)
+    config.screen.blit(choose_john_button, choose_john_rect)
+    config.screen.blit(choose_john, john_rect)
+    config.screen.blit(choose_sarah, sarah_rect)
 
 
 def pause():
-    print("PAUSE")
+    pause_message = config.font.render("Jogo pausado", True, (171, 52, 31))
+    pause_message_rect = pause_message.get_rect(center = (config.width * 0.5, config.height * 0.4))
+    config.screen.blit(dialog_pause, dialog_pause_rect)
+    config.screen.blit(pause_message, pause_message_rect)
+    config.screen.blit(quit_pause_button, quit_pause_button_rect)
 
 
 pygame.init()
@@ -42,45 +54,94 @@ options_button_pressed_rect = options_button_pressed.get_rect(center = (config.w
 quit_button_pressed = pygame.transform.scale(config.quit_button_pressed, (config.width * 0.175, config.height * 0.13))
 quit_button_pressed_rect = quit_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.85))
 
+quit_pause_button = pygame.transform.scale(config.quit_button_pressed, (config.width * 0.175, config.height * 0.13))
+quit_pause_button_rect = quit_pause_button.get_rect(center = (config.width * 0.5, config.height * 0.6))
+
+choose_sarah_button = pygame.transform.scale(config.yellow_button, (config.width * 0.2, config.height * 0.10))
+choose_sarah_rect = choose_sarah_button.get_rect(center = (config.width * 0.35, config.height * 0.80))
+
+choose_john_button = pygame.transform.scale(config.yellow_button, (config.width * 0.2, config.height * 0.10))
+choose_john_rect = choose_john_button.get_rect(center = (config.width * 0.65, config.height * 0.80))
+
+dialog = pygame.transform.scale(config.yellow_dialog, (config.width * 0.35, config.height * 0.10))
+dialog_rect = dialog.get_rect(center = (config.width * 0.5, config.height * 0.25))
+
+dialog_pause = pygame.transform.scale(config.yellow_dialog, (config.width * 0.2, config.height * 0.10))
+dialog_pause_rect = dialog_pause.get_rect(center = (config.width * 0.5, config.height * 0.4))
+
 while running:
     config.events = pygame.event.get()
+
     for event in config.events:
         if event.type == pygame.QUIT:
             running = False
 
-        if event.type == pygame.MOUSEMOTION:
-            if play_button_pressed_rect.collidepoint(event.pos) or \
-               options_button_pressed_rect.collidepoint(event.pos) or \
-               quit_button_pressed_rect.collidepoint(event.pos):
-                pygame.mouse.set_cursor(cursor_hand)
-            else:
-                pygame.mouse.set_cursor(cursor_arrow)
+        if config.state == 'menu':
+            if event.type == pygame.MOUSEMOTION:
+                if (play_button_pressed_rect.collidepoint(event.pos) or
+                   options_button_pressed_rect.collidepoint(event.pos) or
+                   quit_button_pressed_rect.collidepoint(event.pos)):
+                    pygame.mouse.set_cursor(cursor_hand)
+                else:
+                    pygame.mouse.set_cursor(cursor_arrow)
 
-        if event.type == pygame.MOUSEBUTTONUP:
-            if play_button_pressed_rect.collidepoint(event.pos) and event.button == 1:
-                config.clock.tick(5)
-                config.state = 'selection'
-            if quit_button_pressed_rect.collidepoint(event.pos) and event.button == 1:
-                running = False
+            if event.type == pygame.MOUSEBUTTONUP:
+                if play_button_pressed_rect.collidepoint(event.pos) and event.button == 1:
+                    config.click_sound.play()
+                    config.clock.tick(5)
+                    config.state = 'selection'
+
+                if options_button_pressed_rect.collidepoint(event.pos) and event.button ==1:
+                    config.click_sound.play()
+
+                if quit_button_pressed_rect.collidepoint(event.pos) and event.button == 1:
+                    running = False
+
+        if config.state == 'selection':
+            if event.type == pygame.MOUSEMOTION:
+                if choose_sarah_rect.collidepoint(event.pos) or choose_john_rect.collidepoint(event.pos):
+                    pygame.mouse.set_cursor(cursor_hand)
+                else:
+                    pygame.mouse.set_cursor(cursor_arrow)
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if (choose_sarah_rect.collidepoint(event.pos) or
+                   choose_john_rect.collidepoint(event.pos) and
+                   event.button == 1):
+                    config.click_sound.play()
+                    config.clock.tick(5)
+                    game = Game.Game(config)
+                    pygame.mouse.set_cursor(cursor_arrow)
+                    config.state = 'play'
+
+        if config.state == 'pause':
+            if event.type == pygame.MOUSEMOTION:
+                if quit_pause_button_rect.collidepoint(event.pos):
+                    pygame.mouse.set_cursor(cursor_hand)
+                else:
+                    pygame.mouse.set_cursor(cursor_arrow)
+
+            if event.type == pygame.MOUSEBUTTONUP:
+                if quit_pause_button_rect.collidepoint(event.pos) and event.button == 1:
+                    config.click_sound.play()
+                    config.clock.tick(5)
+                    config.state = 'menu'
+                    config.game_over = True
+                    del game
 
         if event.type == pygame.KEYDOWN:
-            if event.key == pygame.K_ESCAPE and config.state != 'menu':
-                if config.state == 'play':
-                    config.state = 'pause'
-                    pygame.time.set_timer(config.enemy_timer, 0)
-                else:
-                    config.state = 'play'
-                    pygame.time.set_timer(config.enemy_timer, 2000)
-
-            if event.key == pygame.K_RETURN:
-                game = Game.Game(config)
-                config.state = 'play'
+            if event.key == pygame.K_ESCAPE:
+                if not config.game_over:
+                    if config.state == 'play' and config.score != 0:
+                        config.state = 'pause'
+                        pygame.time.set_timer(config.enemy_timer, 0)
+                    elif config.state == 'pause':
+                        config.state = 'play'
+                        pygame.time.set_timer(config.enemy_timer, 1800)
 
     match config.state:
         case 'selection': selection()
-        case 'play':
-            print("PLAY")
-            game.update()
+        case 'play': game.update()
         case 'pause': pause()
         case 'menu': menu()
 

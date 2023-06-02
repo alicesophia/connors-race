@@ -13,7 +13,7 @@ class Player(pygame.sprite.Sprite):
         ]
         self.jump = pygame.image.load("../assets/graphics/player/player_jump.png")
         self.image = self.walk[self.index]
-        self.rect = self.image.get_rect(midbottom = (self.config.width * 0.1, self.config.height * 0.7))
+        self.rect = self.image.get_rect(midbottom = (self.config.width * 0.15, self.config.height * 0.7))
         self.gravity = 0
 
     def player_input(self):
