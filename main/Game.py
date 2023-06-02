@@ -25,7 +25,7 @@ class Game:
         for event in self.config.events:
             if not self.config.game_over and self.config.state != 'pause':
                 if event.type == self.config.enemy_timer:
-                    self.enemy_group.add(Enemy(choice(["snail", "snail", "snail", "fly"]), self.config))
+                    self.enemy_group.add(Enemy(choice(["mine", "mine", "tower", "drone"]), self.config))
 
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE and self.config.game_over:

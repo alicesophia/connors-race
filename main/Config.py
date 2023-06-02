@@ -22,8 +22,8 @@ class Config:
 
         self.logo = pygame.image.load("../assets/graphics/main_menu/logo.png").convert_alpha()
         self.menu_background = pygame.image.load("../assets/graphics/main_menu/background.png").convert_alpha()
-        self.game_scenario = pygame.image.load("../assets/graphics/scenario/game_background.png").convert_alpha()
-        self.game_ground = pygame.image.load("../assets/graphics/scenario/game_ground.png").convert_alpha()
+        self.game_scenario = pygame.image.load("../assets/graphics/game_scenario/game_background.png").convert_alpha()
+        self.game_ground = pygame.image.load("../assets/graphics/game_scenario/game_ground.png").convert_alpha()
 
         self.play_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_play_pressed.png").convert_alpha()
         self.options_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_options_pressed.png").convert_alpha()
@@ -46,6 +46,25 @@ class Config:
             pygame.image.load("../assets/graphics/player/john/john_walk_2.png").convert_alpha(),
             pygame.image.load("../assets/graphics/player/john/john_walk_3.png").convert_alpha(),
             pygame.image.load("../assets/graphics/player/john/john_walk_4.png").convert_alpha()
+        ]
+
+        self.enemy_tower = [
+            pygame.image.load("../assets/graphics/enemies/tower/tower_walk_1.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/tower/tower_walk_2.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/tower/tower_walk_3.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/tower/tower_walk_4.png").convert_alpha()
+        ]
+        self.enemy_mine = [
+            pygame.image.load("../assets/graphics/enemies/mine/mine_walk_1.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/mine/mine_walk_2.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/mine/mine_walk_3.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/mine/mine_walk_4.png").convert_alpha()
+        ]
+        self.enemy_drone = [
+            pygame.image.load("../assets/graphics/enemies/drone/drone_walk_1.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/drone/drone_walk_2.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/drone/drone_walk_3.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/enemies/drone/drone_walk_4.png").convert_alpha(),
         ]
 
         self.font = pygame.font.Font("../assets/font/FFFFORWA.TTF", 24)
