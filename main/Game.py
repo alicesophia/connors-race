@@ -21,14 +21,6 @@ class Game:
         self.background = pygame.transform.scale(self.config.game_scenario, (self.config.width, self.config.height * 0.7))
         self.ground = pygame.transform.scale(self.config.game_ground, (self.config.width, self.config.height * 0.3))
 
-        # Tela do game over
-        self.player_stand = pygame.image.load("../assets/graphics/player/player_stand.png").convert_alpha()
-        self.player_stand = pygame.transform.rotozoom(self.player_stand, 0, 2)
-        self.player_stand_rect = self.player_stand.get_rect(center = (400, 200))
-
-        self.hint_text = config.font.render("Aperte espaço para começar".encode(), False, (64, 64, 64))
-        self.hint_text_rect = self.hint_text.get_rect(center = (400, 350))
-
     def update(self):
         for event in self.config.events:
             if not self.config.game_over and self.config.state != 'pause':

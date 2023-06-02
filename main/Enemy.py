@@ -19,7 +19,7 @@ class Enemy(pygame.sprite.Sprite):
                 pygame.image.load("../assets/graphics/fly/fly1.png"),
                 pygame.image.load("../assets/graphics/fly/fly2.png")
             ]
-            self.pos_y = self.config.height * 0.55
+            self.pos_y = self.config.height * 0.54
 
         self.index = 0
         self.image = self.enemy[self.index]

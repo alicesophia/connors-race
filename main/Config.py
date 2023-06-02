@@ -15,8 +15,16 @@ class Config:
         self.height = self.screen.get_height()
         pygame.display.set_caption("Connor's Race")
 
-        self.menu_background = pygame.image.load("../assets/graphics/main_menu/background.png").convert_alpha()
+        self.clock = pygame.time.Clock()
+
+        self.enemy_timer = pygame.USEREVENT + 1
+        self.score = 0
+
         self.logo = pygame.image.load("../assets/graphics/main_menu/logo.png").convert_alpha()
+        self.menu_background = pygame.image.load("../assets/graphics/main_menu/background.png").convert_alpha()
+        self.game_scenario = pygame.image.load("../assets/graphics/scenario/game_background.png").convert_alpha()
+        self.game_ground = pygame.image.load("../assets/graphics/scenario/game_ground.png").convert_alpha()
+
         self.play_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_play_pressed.png").convert_alpha()
         self.options_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_options_pressed.png").convert_alpha()
         self.quit_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_quit_pressed.png").convert_alpha()
@@ -25,15 +33,22 @@ class Config:
         self.yellow_dialog = pygame.image.load("../assets/graphics/main_menu/yellow_dialog.png").convert_alpha()
         self.space_button = pygame.image.load("../assets/graphics/main_menu/button_space.png").convert_alpha()
         self.esc_button = pygame.image.load("../assets/graphics/main_menu/button_esc.png").convert_alpha()
-        self.game_scenario = pygame.image.load("../assets/graphics/scenario/game_background.png").convert_alpha()
-        self.game_ground = pygame.image.load("../assets/graphics/ground.png").convert_alpha()
 
-        self.clock = pygame.time.Clock()
+        self.player = ''
+        self.sarah_walk = [
+            pygame.image.load("../assets/graphics/player/sarah/sarah_walk_1.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/player/sarah/sarah_walk_2.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/player/sarah/sarah_walk_3.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/player/sarah/sarah_walk_4.png").convert_alpha()
+        ]
+        self.jonh_walk = [
+            pygame.image.load("../assets/graphics/player/john/john_walk_1.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/player/john/john_walk_2.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/player/john/john_walk_3.png").convert_alpha(),
+            pygame.image.load("../assets/graphics/player/john/john_walk_4.png").convert_alpha()
+        ]
 
         self.font = pygame.font.Font("../assets/font/FFFFORWA.TTF", 24)
-
-        self.enemy_timer = pygame.USEREVENT + 1
-        self.score = 0
 
         self.click_sound = pygame.mixer.Sound("../assets/audio/click.ogg")
         self.click_sound.set_volume(1)

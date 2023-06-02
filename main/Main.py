@@ -14,19 +14,45 @@ def menu():
 
 def selection():
     background = pygame.transform.scale(config.menu_background, (config.width, config.height))
-    config.screen.blit(background, (0, 0))
     dialog_text = config.font.render("Com quem você vai jogar?", True, (171, 52, 31))
     dialog_text_rect = dialog_text.get_rect(center = (config.width * 0.5, config.height * 0.25))
     choose_sarah = config.font.render("Sarah Connor", True, (171, 52, 31))
     sarah_rect = choose_sarah.get_rect(center = (config.width * 0.35, config.height * 0.80))
     choose_john = config.font.render("John Connor", True, (171, 52, 31))
     john_rect = choose_john.get_rect(center = (config.width * 0.65, config.height * 0.80))
+
+    sarah_walk = [
+        pygame.transform.scale(config.sarah_walk[0], (config.width * 0.04, config.height * 0.14)),
+        pygame.transform.scale(config.sarah_walk[1], (config.width * 0.04, config.height * 0.14)),
+        pygame.transform.scale(config.sarah_walk[2], (config.width * 0.04, config.height * 0.14)),
+        pygame.transform.scale(config.sarah_walk[3], (config.width * 0.04, config.height * 0.14))
+    ]
+    john_walk = [
+        pygame.transform.scale(config.jonh_walk[0], (config.width * 0.04, config.height * 0.14)),
+        pygame.transform.scale(config.jonh_walk[1], (config.width * 0.04, config.height * 0.14)),
+        pygame.transform.scale(config.jonh_walk[2], (config.width * 0.04, config.height * 0.14)),
+        pygame.transform.scale(config.jonh_walk[3], (config.width * 0.04, config.height * 0.14))
+    ]
+
+    global index
+    index += 0.1
+    if index >= len(sarah_walk):
+        index = 0
+
+    img_sarah = sarah_walk[int(index)]
+    img_john = john_walk[int(index)]
+    rect_sarah = img_sarah.get_rect(center = (config.width * 0.35, config.height * 0.6))
+    rect_john = img_john.get_rect(center = (config.width * 0.65, config.height * 0.6))
+
+    config.screen.blit(background, (0, 0))
     config.screen.blit(dialog, dialog_rect)
     config.screen.blit(dialog_text, dialog_text_rect)
     config.screen.blit(choose_sarah_button, choose_sarah_rect)
     config.screen.blit(choose_john_button, choose_john_rect)
     config.screen.blit(choose_john, john_rect)
     config.screen.blit(choose_sarah, sarah_rect)
+    config.screen.blit(img_sarah, rect_sarah)
+    config.screen.blit(img_john, rect_john)
 
 
 def pause():
@@ -42,6 +68,7 @@ running = True
 config = Config.Config()
 cursor_arrow = pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_ARROW)
 cursor_hand = pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_HAND)
+index = 0
 
 logo_img = pygame.transform.scale(config.logo, (config.width * 0.45, config.height * 0.8))
 logo_rect = logo_img.get_rect(center = (config.width * 0.5, config.height * 0.25))
@@ -100,12 +127,19 @@ while running:
 
         if config.state == 'selection':
             if event.type == pygame.MOUSEMOTION:
-                if choose_sarah_rect.collidepoint(event.pos) or choose_john_rect.collidepoint(event.pos):
+                if choose_sarah_rect.collidepoint(event.pos):
+                    pygame.mouse.set_cursor(cursor_hand)
+                elif choose_john_rect.collidepoint(event.pos):
                     pygame.mouse.set_cursor(cursor_hand)
                 else:
                     pygame.mouse.set_cursor(cursor_arrow)
 
             if event.type == pygame.MOUSEBUTTONUP:
+                if choose_sarah_rect.collidepoint(event.pos):
+                    config.player = 'sarah'
+                else:
+                    config.player = 'john'
+
                 if (choose_sarah_rect.collidepoint(event.pos) or
                    choose_john_rect.collidepoint(event.pos) and
                    event.button == 1):

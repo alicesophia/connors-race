@@ -7,11 +7,23 @@ class Player(pygame.sprite.Sprite):
         super().__init__()
         self.config = config
         self.index = 0
-        self.walk = [
-            pygame.image.load("../assets/graphics/player/player_walk_1.png").convert_alpha(),
-            pygame.image.load("../assets/graphics/player/player_walk_2.png").convert_alpha()
-        ]
-        self.jump = pygame.image.load("../assets/graphics/player/player_jump.png")
+
+        if self.config.player == 'sarah':
+            self.walk = [
+                pygame.transform.scale(self.config.sarah_walk[0], (self.config.width * 0.04, self.config.height * 0.14)),
+                pygame.transform.scale(self.config.sarah_walk[1], (self.config.width * 0.04, self.config.height * 0.14)),
+                pygame.transform.scale(self.config.sarah_walk[2], (self.config.width * 0.04, self.config.height * 0.14)),
+                pygame.transform.scale(self.config.sarah_walk[3], (self.config.width * 0.04, self.config.height * 0.14))
+            ]
+        else:
+            self.walk = [
+                pygame.transform.scale(self.config.jonh_walk[0], (self.config.width * 0.04, self.config.height * 0.14)),
+                pygame.transform.scale(self.config.jonh_walk[1], (self.config.width * 0.04, self.config.height * 0.14)),
+                pygame.transform.scale(self.config.jonh_walk[2], (self.config.width * 0.04, self.config.height * 0.14)),
+                pygame.transform.scale(self.config.jonh_walk[3], (self.config.width * 0.04, self.config.height * 0.14))
+            ]
+
+        self.jump = self.walk[len(self.walk) - 1]
         self.image = self.walk[self.index]
         self.rect = self.image.get_rect(midbottom = (self.config.width * 0.15, self.config.height * 0.7))
         self.gravity = 0
