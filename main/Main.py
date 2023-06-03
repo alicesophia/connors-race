@@ -8,7 +8,6 @@ def menu():
     config.screen.blit(background, (0, 0))
     config.screen.blit(logo_img, logo_rect)
     config.screen.blit(play_button_pressed, play_button_pressed_rect)
-    config.screen.blit(options_button_pressed, options_button_pressed_rect)
     config.screen.blit(quit_button_pressed, quit_button_pressed_rect)
 
 
@@ -71,16 +70,13 @@ cursor_hand = pygame.cursors.Cursor(pygame.SYSTEM_CURSOR_HAND)
 index = 0
 
 logo_img = pygame.transform.scale(config.logo, (config.width * 0.45, config.height * 0.8))
-logo_rect = logo_img.get_rect(center = (config.width * 0.5, config.height * 0.25))
+logo_rect = logo_img.get_rect(center = (config.width * 0.5, config.height * 0.35))
 
 play_button_pressed = pygame.transform.scale(config.play_button_pressed, (config.width * 0.2, config.height * 0.15))
-play_button_pressed_rect = play_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.55))
-
-options_button_pressed = pygame.transform.scale(config.options_button_pressed, (config.width * 0.165, config.height * 0.125))
-options_button_pressed_rect = options_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.7))
+play_button_pressed_rect = play_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.65))
 
 quit_button_pressed = pygame.transform.scale(config.quit_button_pressed, (config.width * 0.175, config.height * 0.13))
-quit_button_pressed_rect = quit_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.85))
+quit_button_pressed_rect = quit_button_pressed.get_rect(center = (config.width * 0.5, config.height * 0.8))
 
 quit_pause_button = pygame.transform.scale(config.quit_button_pressed, (config.width * 0.175, config.height * 0.13))
 quit_pause_button_rect = quit_pause_button.get_rect(center = (config.width * 0.5, config.height * 0.6))
@@ -107,7 +103,6 @@ while running:
         if config.state == 'menu':
             if event.type == pygame.MOUSEMOTION:
                 if (play_button_pressed_rect.collidepoint(event.pos) or
-                   options_button_pressed_rect.collidepoint(event.pos) or
                    quit_button_pressed_rect.collidepoint(event.pos)):
                     pygame.mouse.set_cursor(cursor_hand)
                 else:
@@ -118,9 +113,6 @@ while running:
                     config.click_sound.play()
                     config.clock.tick(5)
                     config.state = 'selection'
-
-                if options_button_pressed_rect.collidepoint(event.pos) and event.button ==1:
-                    config.click_sound.play()
 
                 if quit_button_pressed_rect.collidepoint(event.pos) and event.button == 1:
                     running = False

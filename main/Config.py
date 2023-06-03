@@ -26,7 +26,6 @@ class Config:
         self.game_ground = pygame.image.load("../assets/graphics/game_scenario/game_ground.png").convert_alpha()
 
         self.play_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_play_pressed.png").convert_alpha()
-        self.options_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_options_pressed.png").convert_alpha()
         self.quit_button_pressed = pygame.image.load("../assets/graphics/main_menu/button_quit_pressed.png").convert_alpha()
         self.yellow_button = pygame.image.load("../assets/graphics/main_menu/yellow_button.png").convert_alpha()
         self.yellow_button_pressed = pygame.image.load("../assets/graphics/main_menu/yellow_button_pressed.png").convert_alpha()
